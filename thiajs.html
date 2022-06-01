@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="thiajs.css">
+
+</head>
+
+<body>
+<div ng-app="myApp" style="margin:0 30% auto 30%;font-family: 'Comic Sans MS';padding: 1%;">
+  <div ng-controller="MathController" style="border: 2px solid black; background-color:rgba(10, 80, 45, 0.7);">
+    <img src="https://www.starbucks.vn/media/s5hlhw2z/our-espresso_tcm89-24616_w1024_n.png">
+    <h2 style="background-color: lightpink;font-family: 'Comic Sans MS';background-color: white; text-align: center;color: black">ORDER</h2>
+    <br>
+    <div style="margin-left: 1%">
+    <p>Menu : <select style="width: 20%; padding: 1%;border-radius: 0.7rem;" ng-options="dependant for dependant in dependants" ng-model="selectedD" ng-init = "true"></select></p>
+    <br>
+    <p>Size : <select style="width: 20%; padding: 1%;border-radius: 0.7rem;margin: 0 0 0 1% " ng-options="gender for gender in genders" ng-model="selectedG" ng-init="selectedG = true"></select></p>
+    <p>Price: {{price}}$</p>
+    <p>Quantity: <input style="width: 9%; padding: 1%;border-radius: 0.7rem;" type="number" min="1" ng-model="quantity"/> </p>
+      <br><p> Subtotal: {{empInsurance().toFixed(2)}}$</p>
+    <div ng-switch on="selectedD">
+      <div ng-switch-when="Coffe"></div>
+      <div ng-switch-when="Capuchino"></div>
+      <div ng-switch-when="Caramel"></div>
+    </div>
+    <div ng-switch on="selectedG">
+      <div ng-switch-when="M"></div>
+      <div ng-switch-when="L"></div>
+    </div>
+      <div> <br>VAT: {{incomeTax().toFixed(2)}}$<br><br> Bill Total: {{totalSalary().toFixed(2)}}$<br><br><p>After confirmation, please bring the invoice to the payment counter.</p></div>
+      <button style="width: 99%; background-color: white; font-weight: bold; border: 1px solid white;border-radius: 0.6rem;padding: 0.5%;margin-bottom: 2%;margin-top: 2%;" ng-click="done()">Confirm</button>
+  </div>
+</div>
+</div>
+  <script>
+    var app = angular.module('myApp', []);
+
+    app.controller('MathController', function($scope) {
+      $scope.price = 0;
+      $scope.quantity = 1;
+      $scope.genders = ['M' , 'L'];
+      $scope.selectedG = $scope.genders[0];
+      $scope.dependants = ['Coffe', 'Capuchino', 'Caramel'];
+      $scope.selectedD = $scope.dependants[0];
+      $scope.done=function () {
+        alert('Successful confirmation')
+      }
+      $scope.empInsurance = function() {
+
+        return (Number($scope.quantity) * (Number($scope.price)));
+      }
+
+      $scope.incomeTax = function() {
+
+        if ($scope.selectedG == "L") {
+          switch($scope.selectedD) {
+            case "Coffe": $scope.price = 25;
+              break;
+            case "Capuchino": $scope.price = 20;
+              break;
+            case "Caramel": $scope.price = 30;
+              break;
+          }
+        } else {
+          switch($scope.selectedD) {
+            case "Coffe": $scope.price = 23;
+              break;
+            case "Capuchino": $scope.price = 18;
+              break;
+            case "Caramel": $scope.price = 25;
+              break;
+          }
+        }
+        return (Number($scope.quantity) * (Number($scope.price) * 0.1))
+
+      }
+      $scope.totalSalary = function(){
+        return (Number($scope.quantity) * (Number($scope.price))) + (Number($scope.quantity) * (Number($scope.price) * 0.1));
+      }
+    });
+  </script>
+  </body>
+</html>
